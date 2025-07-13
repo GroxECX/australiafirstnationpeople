@@ -1,0 +1,445 @@
+<div id="first-nations-container" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1000px; margin: 2rem auto; position: relative;">
+
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Splash page styles */
+    #acknowledgement-splash {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #ff4500, #ff8c00);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      z-index: 9999;
+      font-weight: 600;
+      user-select: none;
+      font-size: 1.2rem;
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+      transition: opacity 0.6s ease;
+    }
+
+    #acknowledgement-splash.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    #acknowledgement-splash .icon-i {
+      font-weight: 900;
+      font-size: 7rem;
+      color: #fffacd;
+      text-shadow: 0 0 18px #fffacd, 0 0 36px #ffd700;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+
+    #acknowledgement-splash h2 {
+      font-size: 2.6rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 12px rgba(255,255,224,0.85);
+      font-weight: 900;
+      user-select: none;
+    }
+
+    #acknowledgement-splash p {
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      color: #fff8d1;
+    }
+
+    #acknowledgement-splash button {
+      background-color: #ffd700;
+      color: black;
+      font-weight: 700;
+      font-size: 1.3rem;
+      padding: 0.9rem 3.2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ffd700;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+
+    #acknowledgement-splash button:hover,
+    #acknowledgement-splash button:focus {
+      background-color: #ffb700;
+      box-shadow: 0 0 30px #ffb700;
+      outline: none;
+    }
+
+    /* Main site container - hidden initially */
+    #first-nations-site {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: #000;
+      color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255,140,0,0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      position: relative;
+    }
+
+    #first-nations-site.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Top nav bar */
+    #first-nations-site nav {
+      background: linear-gradient(90deg, #ff0000, #ff8c00, #ffd700);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1.2rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      user-select: none;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.9);
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    #first-nations-site nav button {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0.6rem 1.3rem;
+      border-radius: 5px;
+      transition: background-color 0.4s, color 0.4s;
+      box-shadow: none;
+    }
+    #first-nations-site nav button:hover,
+    #first-nations-site nav button.active {
+      background-color: #ffd700;
+      color: black;
+      box-shadow: 0 0 15px #ffd700;
+      transform: scale(1.05);
+    }
+
+    /* Title bar */
+    #first-nations-site header {
+      background: #111;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 3px solid #ff8c00;
+      box-shadow: inset 0 -6px 12px -6px #ff4500;
+    }
+    #first-nations-site header h1 {
+      font-size: 2.8rem;
+      color: #ff4500;
+      text-shadow: 0 0 15px rgba(255,69,0,0.9);
+      margin: 0;
+      user-select: none;
+    }
+    #first-nations-site header p {
+      margin-top: 0.4rem;
+      font-size: 1.15rem;
+      color: #fffacd;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    /* Page container */
+    #first-nations-site .page {
+      padding: 2.5rem 3rem;
+      max-width: 900px;
+      margin: 2rem auto 4rem;
+      min-height: 420px;
+      position: absolute;
+      top: 112px; /* nav + header height */
+      left: 0;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      color: #fffacd;
+      background: #111;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 0 25px rgba(255,140,0,0.5);
+      overflow-y: auto;
+      max-height: 70vh;
+    }
+    #first-nations-site .page.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+      position: relative;
+    }
+
+    /* Headings */
+    #first-nations-site h1, #first-nations-site h2 {
+      color: #ff4500;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 0 12px rgba(255,69,0,0.85);
+    }
+    #first-nations-site h2 {
+      font-size: 1.8rem;
+    }
+
+    #first-nations-site p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Timeline styles */
+    #first-nations-site #timeline-events {
+      margin-top: 1.5rem;
+      display: flex;
+      overflow-x: auto;
+      gap: 1.2rem;
+      padding-bottom: 0.7rem;
+      scrollbar-width: thin;
+      scrollbar-color: #ff8c00 transparent;
+      user-select: none;
+    }
+    #first-nations-site #timeline-events::-webkit-scrollbar {
+      height: 9px;
+    }
+    #first-nations-site #timeline-events::-webkit-scrollbar-thumb {
+      background: #ff8c00;
+      border-radius: 6px;
+    }
+
+    #first-nations-site .timeline-event {
+      flex: 0 0 auto;
+      background: #ff8c00;
+      padding: 0.7rem 1.6rem;
+      border-radius: 35px;
+      color: black;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 0 8px #ff8c00;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+      min-width: 140px;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+    }
+    #first-nations-site .timeline-event:hover,
+    #first-nations-site .timeline-event.active {
+      background: #ffd700;
+      color: black;
+      box-shadow: 0 0 18px #ffd700;
+      transform: scale(1.1);
+    }
+
+    #first-nations-site #timeline-detail {
+      margin-top: 1.5rem;
+      background: #222;
+      padding: 1.3rem 2rem;
+      border-radius: 12px;
+      min-height: 150px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      box-shadow: inset 0 0 20px rgba(255,140,0,0.5);
+      transition: opacity 0.4s ease;
+    }
+
+    /* Scrollbar styling for page content */
+    #first-nations-site .page::-webkit-scrollbar {
+      width: 8px;
+    }
+    #first-nations-site .page::-webkit-scrollbar-thumb {
+      background: #ff8c00;
+      border-radius: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      #first-nations-site nav {
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-size: 1rem;
+      }
+      #first-nations-site nav button {
+        flex: 1 1 120px;
+        padding: 0.5rem 0.8rem;
+      }
+      #first-nations-site .page {
+        padding: 1.5rem 1.8rem;
+        min-height: auto;
+        max-height: none;
+        position: relative !important;
+        transform: none !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        margin-bottom: 3rem;
+      }
+    }
+  </style>
+
+  <!-- Splash Acknowledgement page -->
+  <section id="acknowledgement-splash" role="dialog" aria-modal="true" aria-labelledby="ack-title" aria-describedby="ack-desc">
+    <div class="icon-i" aria-hidden="true">i</div>
+    <h2 id="ack-title">Acknowledgement of Country</h2>
+    <p id="ack-desc">
+      We acknowledge the Traditional Owners and Custodians of the lands on which we meet today, and pay respects to their Elders past, present, and emerging. We recognise their continuing connection to land, waters, and culture, and honour their ongoing contributions to Australia’s rich heritage.
+    </p>
+    <button id="acknowledge-btn" aria-label="Accept and enter the site">Accept</button>
+  </section>
+
+  <!-- Main site container, hidden initially -->
+  <div id="first-nations-site" role="main" aria-live="polite" aria-atomic="true" tabindex="0">
+    <header>
+      <h1>Australia's First Nations People</h1>
+      <p>Exploring history, culture, and legacy through the landmark Mabo decision and beyond.</p>
+    </header>
+
+    <nav>
+      <button class="nav-btn active" data-target="culture">Culture</button>
+      <button class="nav-btn" data-target="overview">Overview</button>
+      <button class="nav-btn" data-target="timeline">Timeline</button>
+      <button class="nav-btn" data-target="background">Background</button>
+      <button class="nav-btn" data-target="significance">Significance</button>
+      <button class="nav-btn" data-target="impact">Impact</button>
+      <button class="nav-btn" data-target="legacy">Legacy</button>
+    </nav>
+
+    <div id="culture" class="page active" aria-live="polite">
+      <h1>Culture</h1>
+      <p>Australia's First Nations peoples have rich cultural traditions including storytelling, art, music, dance, and ceremonies that have been passed down through millennia.</p>
+      <p>These cultural expressions continue to play a vital role in maintaining identity, community, and connection to Country today.</p>
+    </div>
+
+    <div id="overview" class="page" aria-live="polite">
+      <h1>Overview</h1>
+      <p>The Mabo decision stands as one of the most important legal milestones in Australia’s history. It recognized the native title rights of the Aboriginal and Torres Strait Islander peoples and overturned the doctrine of terra nullius, which falsely claimed Australia was uninhabited before European settlement.</p>
+      <p>This site explores the rich culture, history, and lasting legacy of Australia's First Nations peoples through detailed sections including an interactive timeline.</p>
+    </div>
+
+    <div id="timeline" class="page" aria-live="polite">
+      <h1>Interactive Timeline</h1>
+      <div id="timeline-events" role="list" aria-label="Mabo decision timeline">
+        <div tabindex="0" class="timeline-event active" data-detail="1974: Eddie Koiki Mabo discovers he does not legally own his Murray Island land, sparking the fight for land rights.">1974</div>
+        <div tabindex="0" class="timeline-event" data-detail="1981: Land rights conference at James Cook University. Mabo advocates for a legal test case on native title.">1981</div>
+        <div tabindex="0" class="timeline-event" data-detail="1982: Mabo files a lawsuit against the Queensland government challenging land laws.">1982</div>
+        <div tabindex="0" class="timeline-event" data-detail="1992: High Court delivers the historic Mabo decision recognizing native title rights.">1992</div>
+        <div tabindex="0" class="timeline-event" data-detail="1993: The Native Title Act is passed by Australian Parliament to formalize native title recognition.">1993</div>
+        <div tabindex="0" class="timeline-event" data-detail="1998: Wik decision further refines native title rights coexisting with pastoral leases.">1998</div>
+        <div tabindex="0" class="timeline-event" data-detail="2007: Apology to Australia's Indigenous peoples by Prime Minister Kevin Rudd.">2007</div>
+      </div>
+      <div id="timeline-detail" aria-live="polite">1974: Eddie Koiki Mabo discovers he does not legally own his Murray Island land, sparking the fight for land rights.</div>
+    </div>
+
+    <div id="background" class="page" aria-live="polite">
+      <h1>Background</h1>
+      <p>Indigenous Australians have lived on the continent for over 65,000 years, developing complex cultures deeply connected to the land and sea. The Aboriginal and Torres Strait Islander peoples have distinct languages, traditions, and spiritual ties to Country.</p>
+      <p>Before the Mabo decision, Australian law operated on the false premise of terra nullius, claiming the land was unowned prior to British colonization, which ignored Indigenous sovereignty and rights.</p>
+    </div>
+
+    <div id="significance" class="page" aria-live="polite">
+      <h1>Significance</h1>
+      <p>The Mabo decision fundamentally transformed Australian law by overturning terra nullius and legally recognizing Indigenous peoples’ ongoing connection to their traditional lands through native title.</p>
+      <p>It set a precedent for reconciliation and justice, acknowledging Indigenous Australians’ rights and histories within the country’s legal framework.</p>
+    </div>
+
+    <div id="impact" class="page" aria-live="polite">
+      <h1>Impact</h1>
+      <p>The Mabo decision led to the Native Title Act 1993, enabling Indigenous peoples to claim land rights formally and protect their cultural heritage.</p>
+      <p>It spurred legal reforms, influenced other native title claims, and strengthened Indigenous voices in political and cultural conversations nationally and internationally.</p>
+    </div>
+
+    <div id="legacy" class="page" aria-live="polite">
+      <h1>Legacy</h1>
+      <p>The legacy of the Mabo decision extends beyond law to social and cultural realms. It inspired pride, empowerment, and renewed connection to Country among Indigenous Australians.</p>
+      <p>Its influence continues to resonate in ongoing native title claims, reconciliation efforts, and the broader recognition of First Nations peoples as Australia’s original custodians.</p>
+    </div>
+
+  </div>
+
+  <script>
+    (() => {
+      const splash = document.getElementById('acknowledgement-splash');
+      const acceptBtn = document.getElementById('acknowledge-btn');
+      const site = document.getElementById('first-nations-site');
+      const navButtons = site.querySelectorAll('.nav-btn');
+      const pages = site.querySelectorAll('.page');
+
+      // Show main site after Accept
+      acceptBtn.addEventListener('click', () => {
+        splash.classList.add('hidden');
+        setTimeout(() => {
+          splash.style.display = 'none';
+          site.classList.add('visible');
+          site.focus();
+        }, 600);
+      });
+
+      // Navigation handling
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active from buttons
+          navButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          // Show relevant page
+          const target = btn.dataset.target;
+          pages.forEach(p => {
+            if (p.id === target) {
+              p.classList.add('active');
+              p.focus();
+            } else {
+              p.classList.remove('active');
+            }
+          });
+        });
+
+        // Keyboard accessibility
+        btn.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+
+      // Timeline interactivity
+      const timelineEvents = document.querySelectorAll('#timeline-events .timeline-event');
+      const timelineDetail = document.getElementById('timeline-detail');
+
+      timelineEvents.forEach(event => {
+        event.addEventListener('click', () => {
+          timelineEvents.forEach(e => e.classList.remove('active'));
+          event.classList.add('active');
+          fadeTextChange(timelineDetail, event.dataset.detail);
+        });
+
+        // Keyboard support
+        event.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            event.click();
+          }
+        });
+      });
+
+      // Fade text change for timeline detail
+      function fadeTextChange(element, newText) {
+        element.style.opacity = 0;
+        setTimeout(() => {
+          element.textContent = newText;
+          element.style.opacity = 1;
+        }, 300);
+      }
+    })();
+  </script>
+</div>
